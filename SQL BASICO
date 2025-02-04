@@ -1,0 +1,66 @@
+-- Criação do banco de dados
+CREATE DATABASE IF NOT EXISTS projeto;
+USE projeto;
+
+-- Criação da tabela de usuários
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(30) NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(40) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Inserindo alguns usuários de exemplo
+INSERT INTO usuarios (nome, email, senha) VALUES
+('Alice Silva', 'alice@email.com', 'senha123'),
+('Bruno Costa', 'bruno@email.com', 'senha456'),
+('Carlos Souza', 'carlos@email.com', 'senha789');
+
+-- Selecionando todos os usuários
+SELECT * FROM usuarios;
+
+--Deletando um usuario
+DELETE FROM usuarios
+WHERE id = 3;
+
+--Criação da tabela pedidos 
+CREATE TABLE pedidos(
+pedido_id INT AUTO_INCREMENT PRIMARY KEY,
+usuarios_id INT,
+nome_pedido VARCHAR(30),
+tipo_pedido varchar(30)
+);
+
+--Adicionando chave estrangeira 
+ALTER TABLE PEDIDOS 
+ADD CONSTRAINT fk_pedidos_id FOREIGN KEY (usuarios_id) REFERENCES usuarios(id);
+
+
+-- Inserindo pedidos para usuários existentes
+INSERT INTO pedidos (usuario_id, nome_pedido, tipo_pedido) VALUES
+(1, 'Notebook Dell', 'Eletrônicos'),
+(2, 'Smartphone Samsung', 'Eletrônicos'),
+(1, 'Cadeira Gamer', 'Móveis'),
+(3, 'Teclado Mecânico', 'Acessórios');
+
+--Inserindo usuarios sem pedidos existentes 
+
+INSERT INTO usuarios (nome, email, senha) VALUES
+('Daniela Lima', 'daniela@email.com', 'senha321'),
+('Eduardo Mendes', 'eduardo@email.com', 'senha654');
+
+
+--Inserindo pedidos sem usuarios 
+INSERT INTO pedidos (usuario_id, nome_pedido, tipo_pedido) VALUES
+(NULL,'Alcool 70%','Limpeza'),
+(NULL,'Mousepad','acessorios'),
+(NULL,'Dom Casmurro','Livros');
+
+--Junção de usuarios com pedidos em uma tabela só 
+SELECT nome u, nome_pedido p FROM 
+usuarios u 
+inner join pedidos p 
+on p.usuarios_id = u.id;
+
+
